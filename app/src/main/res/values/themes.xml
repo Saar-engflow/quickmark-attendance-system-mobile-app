@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.QuickMark" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here -->
+        <item name="android:statusBarColor">@color/green</item> <!-- status bar color -->
+        <item name="android:windowLightStatusBar">false</item>  <!-- white icons on status bar -->
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryContainer">@color/green</item>
+    </style>
+
+    <!-- App theme -->
+    <style name="Theme.QuickMark" parent="Base.Theme.QuickMark"/>
+</resources>
