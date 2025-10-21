@@ -1,50 +1,21 @@
 package com.example.quickmark;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import android.content.Intent;
 import android.util.Patterns;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Button;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.graphics.Color;
-
-
 import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
-
-
 
     EditText edtUserId, edtFirstName, edtLastName, edtEmail, edtPassword, edtConfirmPassword, edtInstitute, edtRole;
     Button btnSignUp;
@@ -84,52 +55,39 @@ public class SignUpActivity extends AppCompatActivity {
                 return;
             }
 
-// Email validation
+            // Email validation
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(SignUpActivity.this, "Enter a valid email", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-// Strong password validation
-            String passwordPattern = "^(?=.[a-z])(?=.[A-Z])(?=.*\\d).{6,}$";
-            if (!password.matches(passwordPattern)) {
-                Toast.makeText(SignUpActivity.this,
-                        "Password must be at least 6 characters, contain a capital letter, small letter, and a number",
-                        Toast.LENGTH_LONG).show();
+            // Confirm password
+            if (!password.equals(confirmPassword)) {
+                Toast.makeText(SignUpActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-// Confirm password
-            if (!password.equals(confirmPassword)) {
-                Toast.makeText(SignUpActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-return;
-            }
-
-
             // URL to your PHP script
-            String url = "http://192.168.97.223/QuickMark/views/auth/register.php?role=student";
+            String url = "http://10.111.102.223/QuickMark/views/auth/register.php?role=student";
 
             // Use Volley
-            com.android.volley.RequestQueue queue = com.android.volley.toolbox.Volley.newRequestQueue(this);
-            com.android.volley.toolbox.StringRequest stringRequest = new com.android.volley.toolbox.StringRequest(
+            com.android.volley.RequestQueue queue = Volley.newRequestQueue(this);
+            StringRequest stringRequest = new StringRequest(
                     com.android.volley.Request.Method.POST,
                     url,
                     response -> {
-                        // Handle PHP response
                         Toast.makeText(SignUpActivity.this, "Server Response: " + response, Toast.LENGTH_LONG).show();
-                        // If successful, go to login
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                     },
                     error -> {
-                        // Handle errors
                         Toast.makeText(SignUpActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
                     }
             ) {
                 @Override
                 protected java.util.Map<String, String> getParams() {
-                    java.util.Map<String, String> params = new java.util.HashMap<>();
+                    java.util.Map<String, String> params = new HashMap<>();
                     params.put("signup", "true");
                     params.put("userid", userId);
                     params.put("firstName", firstName);
@@ -146,12 +104,11 @@ return;
             queue.add(stringRequest);
         });
 
-
         // "Login here" TextView Logic
         txtLoginHere.setOnClickListener(v -> {
             Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
-   });
-}
+        });
+    }
 }

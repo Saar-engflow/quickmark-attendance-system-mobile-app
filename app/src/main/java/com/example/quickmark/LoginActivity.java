@@ -13,7 +13,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_login);
 
         // Link XML fields
@@ -55,37 +59,37 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
         // Make sure this URL points to your PHP login script on XAMPP
-        String url = "http://192.168.97.223/QuickMark/api/login_api.php";
+        String url = "http://10.111.102.223/QuickMark/api/login_api.php";
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
-                    response = response.trim();
-                    switch (response) {
-                        case "success":
+                    try {
+                        // Parse JSON response from your updated PHP API
+                        JSONObject jsonObject = new JSONObject(response.trim());
+
+                        if (jsonObject.getString("status").equals("success")) {
+                            String fullName = jsonObject.getString("fullName");
+                            String userId = jsonObject.getString("user_id");
                             Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                            // Go to student dashboard
+
+                            // Go to student dashboard and pass fullName
                             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                            intent.putExtra("email", email); // optionally pass user info
+                            intent.putExtra("fullName", fullName);
+                            intent.putExtra("user_id", userId);
                             startActivity(intent);
                             finish();
-                            break;
-                        case "Incorrect password":
-                            Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_LONG).show();
-                            break;
-                        case "Account pending approval":
-                            Toast.makeText(LoginActivity.this, "Your account is pending admin approval", Toast.LENGTH_LONG).show();
-                            break;
-                        case "User not found":
-                            Toast.makeText(LoginActivity.this, "User not found", Toast.LENGTH_LONG).show();
-                            break;
-                        case "Missing parameters":
-                            Toast.makeText(LoginActivity.this, "Server error: missing parameters", Toast.LENGTH_LONG).show();
-                            break;
-                        default:
-                            Toast.makeText(LoginActivity.this, "Unknown response: " + response, Toast.LENGTH_LONG).show();
-                            break;
+
+                        } else {
+                            // Handle errors from API
+                            String message = jsonObject.getString("message");
+                            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(LoginActivity.this, "Parsing error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> Toast.makeText(LoginActivity.this, "Network Error: " + error.getMessage(), Toast.LENGTH_LONG).show()
@@ -102,5 +106,6 @@ public class LoginActivity extends AppCompatActivity {
         };
 
         queue.add(request);
-}
+    }
+
 }
