@@ -37,7 +37,7 @@ import java.util.Map;
 public class DashboardActivity extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST = 1001;
-    private final String BASE_URL = "http://10.111.102.223/QuickMark/api/";
+    private final String BASE_URL = "http://192.168.10.184/QuickMark/api/";
 
     private Button btnLogout, btnClockIn;
     private TextView txtFullName, courseNameTextView, locationTextView;

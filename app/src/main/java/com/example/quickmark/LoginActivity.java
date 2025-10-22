@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
         // Make sure this URL points to your PHP login script on XAMPP
-        String url = "http://10.111.102.223/QuickMark/api/login_api.php";
+        String url = "http://192.168.10.184/QuickMark/api/login_api.php";
 
         RequestQueue queue = Volley.newRequestQueue(this);
 

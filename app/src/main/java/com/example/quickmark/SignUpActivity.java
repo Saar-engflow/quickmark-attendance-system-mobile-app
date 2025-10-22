@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             // URL to your PHP script
-            String url = "http://10.111.102.223/QuickMark/views/auth/register.php?role=student";
+            String url = "http://192.168.10.184/QuickMark/views/auth/register.php?role=student";
 
             // Use Volley
             com.android.volley.RequestQueue queue = Volley.newRequestQueue(this);
